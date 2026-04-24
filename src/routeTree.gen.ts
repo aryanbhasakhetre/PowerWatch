@@ -10,33 +10,167 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SeniorIndexRouteImport } from './routes/senior.index'
+import { Route as PublicIndexRouteImport } from './routes/public.index'
+import { Route as JuniorIndexRouteImport } from './routes/junior.index'
+import { Route as SeniorTeamRouteImport } from './routes/senior.team'
+import { Route as SeniorReportsRouteImport } from './routes/senior.reports'
+import { Route as SeniorMapRouteImport } from './routes/senior.map'
+import { Route as SeniorLinesRouteImport } from './routes/senior.lines'
+import { Route as PublicReportRouteImport } from './routes/public.report'
+import { Route as PublicIdRouteImport } from './routes/public.$id'
+import { Route as JuniorIdRouteImport } from './routes/junior.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SeniorIndexRoute = SeniorIndexRouteImport.update({
+  id: '/senior/',
+  path: '/senior/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicIndexRoute = PublicIndexRouteImport.update({
+  id: '/public/',
+  path: '/public/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JuniorIndexRoute = JuniorIndexRouteImport.update({
+  id: '/junior/',
+  path: '/junior/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SeniorTeamRoute = SeniorTeamRouteImport.update({
+  id: '/senior/team',
+  path: '/senior/team',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SeniorReportsRoute = SeniorReportsRouteImport.update({
+  id: '/senior/reports',
+  path: '/senior/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SeniorMapRoute = SeniorMapRouteImport.update({
+  id: '/senior/map',
+  path: '/senior/map',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SeniorLinesRoute = SeniorLinesRouteImport.update({
+  id: '/senior/lines',
+  path: '/senior/lines',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicReportRoute = PublicReportRouteImport.update({
+  id: '/public/report',
+  path: '/public/report',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicIdRoute = PublicIdRouteImport.update({
+  id: '/public/$id',
+  path: '/public/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JuniorIdRoute = JuniorIdRouteImport.update({
+  id: '/junior/$id',
+  path: '/junior/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/junior/$id': typeof JuniorIdRoute
+  '/public/$id': typeof PublicIdRoute
+  '/public/report': typeof PublicReportRoute
+  '/senior/lines': typeof SeniorLinesRoute
+  '/senior/map': typeof SeniorMapRoute
+  '/senior/reports': typeof SeniorReportsRoute
+  '/senior/team': typeof SeniorTeamRoute
+  '/junior/': typeof JuniorIndexRoute
+  '/public/': typeof PublicIndexRoute
+  '/senior/': typeof SeniorIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/junior/$id': typeof JuniorIdRoute
+  '/public/$id': typeof PublicIdRoute
+  '/public/report': typeof PublicReportRoute
+  '/senior/lines': typeof SeniorLinesRoute
+  '/senior/map': typeof SeniorMapRoute
+  '/senior/reports': typeof SeniorReportsRoute
+  '/senior/team': typeof SeniorTeamRoute
+  '/junior': typeof JuniorIndexRoute
+  '/public': typeof PublicIndexRoute
+  '/senior': typeof SeniorIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/junior/$id': typeof JuniorIdRoute
+  '/public/$id': typeof PublicIdRoute
+  '/public/report': typeof PublicReportRoute
+  '/senior/lines': typeof SeniorLinesRoute
+  '/senior/map': typeof SeniorMapRoute
+  '/senior/reports': typeof SeniorReportsRoute
+  '/senior/team': typeof SeniorTeamRoute
+  '/junior/': typeof JuniorIndexRoute
+  '/public/': typeof PublicIndexRoute
+  '/senior/': typeof SeniorIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/junior/$id'
+    | '/public/$id'
+    | '/public/report'
+    | '/senior/lines'
+    | '/senior/map'
+    | '/senior/reports'
+    | '/senior/team'
+    | '/junior/'
+    | '/public/'
+    | '/senior/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/junior/$id'
+    | '/public/$id'
+    | '/public/report'
+    | '/senior/lines'
+    | '/senior/map'
+    | '/senior/reports'
+    | '/senior/team'
+    | '/junior'
+    | '/public'
+    | '/senior'
+  id:
+    | '__root__'
+    | '/'
+    | '/junior/$id'
+    | '/public/$id'
+    | '/public/report'
+    | '/senior/lines'
+    | '/senior/map'
+    | '/senior/reports'
+    | '/senior/team'
+    | '/junior/'
+    | '/public/'
+    | '/senior/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  JuniorIdRoute: typeof JuniorIdRoute
+  PublicIdRoute: typeof PublicIdRoute
+  PublicReportRoute: typeof PublicReportRoute
+  SeniorLinesRoute: typeof SeniorLinesRoute
+  SeniorMapRoute: typeof SeniorMapRoute
+  SeniorReportsRoute: typeof SeniorReportsRoute
+  SeniorTeamRoute: typeof SeniorTeamRoute
+  JuniorIndexRoute: typeof JuniorIndexRoute
+  PublicIndexRoute: typeof PublicIndexRoute
+  SeniorIndexRoute: typeof SeniorIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,21 +182,92 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/senior/': {
+      id: '/senior/'
+      path: '/senior'
+      fullPath: '/senior/'
+      preLoaderRoute: typeof SeniorIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/public/': {
+      id: '/public/'
+      path: '/public'
+      fullPath: '/public/'
+      preLoaderRoute: typeof PublicIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/junior/': {
+      id: '/junior/'
+      path: '/junior'
+      fullPath: '/junior/'
+      preLoaderRoute: typeof JuniorIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/senior/team': {
+      id: '/senior/team'
+      path: '/senior/team'
+      fullPath: '/senior/team'
+      preLoaderRoute: typeof SeniorTeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/senior/reports': {
+      id: '/senior/reports'
+      path: '/senior/reports'
+      fullPath: '/senior/reports'
+      preLoaderRoute: typeof SeniorReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/senior/map': {
+      id: '/senior/map'
+      path: '/senior/map'
+      fullPath: '/senior/map'
+      preLoaderRoute: typeof SeniorMapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/senior/lines': {
+      id: '/senior/lines'
+      path: '/senior/lines'
+      fullPath: '/senior/lines'
+      preLoaderRoute: typeof SeniorLinesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/public/report': {
+      id: '/public/report'
+      path: '/public/report'
+      fullPath: '/public/report'
+      preLoaderRoute: typeof PublicReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/public/$id': {
+      id: '/public/$id'
+      path: '/public/$id'
+      fullPath: '/public/$id'
+      preLoaderRoute: typeof PublicIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/junior/$id': {
+      id: '/junior/$id'
+      path: '/junior/$id'
+      fullPath: '/junior/$id'
+      preLoaderRoute: typeof JuniorIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  JuniorIdRoute: JuniorIdRoute,
+  PublicIdRoute: PublicIdRoute,
+  PublicReportRoute: PublicReportRoute,
+  SeniorLinesRoute: SeniorLinesRoute,
+  SeniorMapRoute: SeniorMapRoute,
+  SeniorReportsRoute: SeniorReportsRoute,
+  SeniorTeamRoute: SeniorTeamRoute,
+  JuniorIndexRoute: JuniorIndexRoute,
+  PublicIndexRoute: PublicIndexRoute,
+  SeniorIndexRoute: SeniorIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
