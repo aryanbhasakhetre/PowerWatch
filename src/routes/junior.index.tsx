@@ -65,11 +65,10 @@ function IncidentCard({ i, muted = false }: { i: typeof incidents[number]; muted
     <Link
       to="/junior/$id"
       params={{ id: i.id }}
-      disabled={muted}
       className={cn(
         "flex items-center gap-3 rounded-lg border bg-surface p-4 transition-colors",
         muted
-          ? "pointer-events-none border-border"
+          ? "pointer-events-none border-border opacity-100"
           : "border-border hover:border-border-strong",
       )}
     >
