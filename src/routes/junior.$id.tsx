@@ -213,7 +213,8 @@ function IncidentDetail() {
         </div>
 
         <div className="mt-4 text-center text-[11px] text-muted-foreground">
-          Currently visible to senior dashboard as: <strong>{statusLabel[inc.status]}</strong>
+          Currently visible to senior dashboard as:{" "}
+          <strong>{statusLabel[inc.status as keyof typeof statusLabel]}</strong>
         </div>
       </div>
     </AppShell>

@@ -137,7 +137,9 @@ function PublicIncident() {
           </div>
 
           <div className="mt-6 rounded-md bg-surface-2 p-4 text-sm">
-            <div className="font-semibold">Current status: {statusLabel[inc.status]}</div>
+            <div className="font-semibold">
+              Current status: {statusLabel[inc.status as keyof typeof statusLabel]}
+            </div>
             <p className="mt-1 text-muted-foreground">{inc.description}</p>
             <div className="mt-3 grid grid-cols-2 gap-3 text-[11px]">
               <Time label="Reported" value={timeAgo(inc.reportedAt)} />
