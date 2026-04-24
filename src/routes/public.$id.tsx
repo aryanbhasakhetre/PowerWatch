@@ -106,19 +106,24 @@ function PublicIncident() {
               {flow.map((f, idx) => {
                 const done = idx < currentIdx;
                 const current = idx === currentIdx;
-                const tone = f.tone;
+                const toneClass =
+                  f.tone === "warning"
+                    ? "border-severity-warning text-severity-warning"
+                    : f.tone === "significant"
+                      ? "border-severity-significant text-severity-significant"
+                      : f.tone === "critical"
+                        ? "border-severity-critical text-severity-critical"
+                        : "border-severity-restored text-severity-restored";
                 return (
                   <div key={f.key} className="flex flex-col items-center text-center">
                     <div
                       className={cn(
                         "flex h-8 w-8 items-center justify-center rounded-full border-2 bg-surface text-[11px] font-bold relative",
-                        done && `border-severity-${tone} text-severity-${tone}`,
-                        current && `border-severity-${tone} text-severity-${tone}`,
-                        !done && !current && "border-border text-muted-foreground",
+                        (done || current) ? toneClass : "border-border text-muted-foreground",
                       )}
                     >
                       {done ? "✓" : idx + 1}
-                      {current && tone === "critical" && (
+                      {current && f.tone === "critical" && (
                         <span className="pulse-ring border-2 border-severity-critical" />
                       )}
                     </div>
