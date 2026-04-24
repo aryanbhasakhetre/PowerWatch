@@ -10,33 +10,102 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SeniorIndexRouteImport } from './routes/senior.index'
+import { Route as SeniorTeamRouteImport } from './routes/senior.team'
+import { Route as SeniorReportsRouteImport } from './routes/senior.reports'
+import { Route as SeniorMapRouteImport } from './routes/senior.map'
+import { Route as SeniorLinesRouteImport } from './routes/senior.lines'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SeniorIndexRoute = SeniorIndexRouteImport.update({
+  id: '/senior/',
+  path: '/senior/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SeniorTeamRoute = SeniorTeamRouteImport.update({
+  id: '/senior/team',
+  path: '/senior/team',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SeniorReportsRoute = SeniorReportsRouteImport.update({
+  id: '/senior/reports',
+  path: '/senior/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SeniorMapRoute = SeniorMapRouteImport.update({
+  id: '/senior/map',
+  path: '/senior/map',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SeniorLinesRoute = SeniorLinesRouteImport.update({
+  id: '/senior/lines',
+  path: '/senior/lines',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/senior/lines': typeof SeniorLinesRoute
+  '/senior/map': typeof SeniorMapRoute
+  '/senior/reports': typeof SeniorReportsRoute
+  '/senior/team': typeof SeniorTeamRoute
+  '/senior/': typeof SeniorIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/senior/lines': typeof SeniorLinesRoute
+  '/senior/map': typeof SeniorMapRoute
+  '/senior/reports': typeof SeniorReportsRoute
+  '/senior/team': typeof SeniorTeamRoute
+  '/senior': typeof SeniorIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/senior/lines': typeof SeniorLinesRoute
+  '/senior/map': typeof SeniorMapRoute
+  '/senior/reports': typeof SeniorReportsRoute
+  '/senior/team': typeof SeniorTeamRoute
+  '/senior/': typeof SeniorIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/senior/lines'
+    | '/senior/map'
+    | '/senior/reports'
+    | '/senior/team'
+    | '/senior/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/senior/lines'
+    | '/senior/map'
+    | '/senior/reports'
+    | '/senior/team'
+    | '/senior'
+  id:
+    | '__root__'
+    | '/'
+    | '/senior/lines'
+    | '/senior/map'
+    | '/senior/reports'
+    | '/senior/team'
+    | '/senior/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SeniorLinesRoute: typeof SeniorLinesRoute
+  SeniorMapRoute: typeof SeniorMapRoute
+  SeniorReportsRoute: typeof SeniorReportsRoute
+  SeniorTeamRoute: typeof SeniorTeamRoute
+  SeniorIndexRoute: typeof SeniorIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +117,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/senior/': {
+      id: '/senior/'
+      path: '/senior'
+      fullPath: '/senior/'
+      preLoaderRoute: typeof SeniorIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/senior/team': {
+      id: '/senior/team'
+      path: '/senior/team'
+      fullPath: '/senior/team'
+      preLoaderRoute: typeof SeniorTeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/senior/reports': {
+      id: '/senior/reports'
+      path: '/senior/reports'
+      fullPath: '/senior/reports'
+      preLoaderRoute: typeof SeniorReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/senior/map': {
+      id: '/senior/map'
+      path: '/senior/map'
+      fullPath: '/senior/map'
+      preLoaderRoute: typeof SeniorMapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/senior/lines': {
+      id: '/senior/lines'
+      path: '/senior/lines'
+      fullPath: '/senior/lines'
+      preLoaderRoute: typeof SeniorLinesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SeniorLinesRoute: SeniorLinesRoute,
+  SeniorMapRoute: SeniorMapRoute,
+  SeniorReportsRoute: SeniorReportsRoute,
+  SeniorTeamRoute: SeniorTeamRoute,
+  SeniorIndexRoute: SeniorIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
