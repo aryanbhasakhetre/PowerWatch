@@ -52,9 +52,20 @@ function ReportFault() {
         </p>
 
         <form
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            setSubmitted(true);
+            setBusy(true);
+            setErr(null);
+            const { error } = await supabase.from("citizen_reports").insert({
+              description: desc,
+              lat: 19.06,
+              lng: 72.836,
+              area: "Bandra West",
+              reporter_id: user?.id ?? null,
+            });
+            setBusy(false);
+            if (error) setErr(error.message);
+            else setSubmitted(true);
           }}
           className="mt-6 space-y-4"
         >
