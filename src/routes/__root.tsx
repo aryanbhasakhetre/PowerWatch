@@ -30,14 +30,13 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "PowerWatch — Outage Management" },
+      { name: "description", content: "PowerWatch: real-time outage management for utilities, field crews, and citizens." },
+      { name: "author", content: "PowerWatch" },
+      { property: "og:title", content: "PowerWatch — Outage Management" },
+      { property: "og:description", content: "Real-time outage management for utilities, field crews, and citizens." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {

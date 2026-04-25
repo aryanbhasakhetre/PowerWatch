@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/junior/$id")({
-  head: () => ({ meta: [{ title: "Incident Detail — OMS" }] }),
+  head: () => ({ meta: [{ title: "Incident Detail — PowerWatch" }] }),
   component: () => (
     <RequireAuth role="junior">
       <IncidentDetail />

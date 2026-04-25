@@ -7,7 +7,7 @@ import { SeverityBadge } from "@/components/SeverityBadge";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/senior/lines")({
-  head: () => ({ meta: [{ title: "Line Closures — OMS" }] }),
+  head: () => ({ meta: [{ title: "Line Closures — PowerWatch" }] }),
   component: () => (
     <RequireAuth role="senior">
       <LinesPage />

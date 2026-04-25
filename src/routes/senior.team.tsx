@@ -5,7 +5,7 @@ import { RequireAuth } from "@/components/RequireAuth";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/senior/team")({
-  head: () => ({ meta: [{ title: "Team Tracker — OMS" }] }),
+  head: () => ({ meta: [{ title: "Team Tracker — PowerWatch" }] }),
   component: () => (
     <RequireAuth role="senior">
       <TeamPage />
