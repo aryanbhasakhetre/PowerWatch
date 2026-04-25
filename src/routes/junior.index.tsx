@@ -75,7 +75,7 @@ function JuniorFeed() {
   );
 }
 
-function IncidentCard({ i, muted = false }: { i: typeof incidents[number]; muted?: boolean }) {
+function IncidentCard({ i, muted = false }: { i: Incident; muted?: boolean }) {
   const c = severityClasses(i.severity);
   return (
     <Link
