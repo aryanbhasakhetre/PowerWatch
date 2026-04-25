@@ -160,7 +160,6 @@ export function AppShell({
                   {initials}
                 </div>
               </div>
-            </div>
           </header>
 
           {/* Mobile bottom nav for junior/public */}
