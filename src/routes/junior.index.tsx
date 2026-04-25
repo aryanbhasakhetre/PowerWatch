@@ -1,21 +1,31 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { AppShell } from "@/components/AppShell";
-import { incidents, severityClasses, statusLabel, timeAgo } from "@/lib/mock-data";
+import { severityClasses, statusLabel, timeAgo, type Incident } from "@/lib/mock-data";
+import { useIncidents } from "@/lib/incidents";
+import { useAuth } from "@/lib/auth";
+import { RequireAuth } from "@/components/RequireAuth";
 import { SeverityBadge } from "@/components/SeverityBadge";
 import { cn } from "@/lib/utils";
 import { ChevronRight, MapPin } from "lucide-react";
 
 export const Route = createFileRoute("/junior/")({
   head: () => ({ meta: [{ title: "Field Incidents — OMS" }] }),
-  component: JuniorFeed,
+  component: () => (
+    <RequireAuth role="junior">
+      <JuniorFeed />
+    </RequireAuth>
+  ),
 });
 
 function JuniorFeed() {
-  // Pretend the logged-in junior is "Rohan Patil"
-  const myIncidents = incidents.filter((i) =>
-    ["INC-2841", "INC-2840", "INC-2838"].includes(i.code),
-  );
-  const others = incidents.filter((i) => !myIncidents.includes(i));
+  const { incidents, loading } = useIncidents();
+  const { user } = useAuth();
+  const myIncidents = incidents.filter((i) => i.assignedTo && user && i.assignedTo === user.user_metadata?.full_name);
+  // If nothing is assigned to this user yet, show all unassigned/active as "available"
+  const available = myIncidents.length === 0
+    ? incidents.filter((i) => i.status !== "restored")
+    : incidents.filter((i) => !myIncidents.includes(i) && i.status !== "restored");
+  const fullName = (user?.user_metadata?.full_name as string | undefined) || user?.email?.split("@")[0] || "Engineer";
 
   return (
     <AppShell persona="junior">
@@ -23,35 +33,41 @@ function JuniorFeed() {
         <div className="flex items-end justify-between">
           <div>
             <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
-              On Duty · Mumbra Zone
+              On Duty {loading && "· syncing…"}
             </div>
             <h1 className="mt-1 text-2xl font-semibold tracking-tight">
-              Hello, Rohan
+              Hello, {fullName.split(" ")[0]}
             </h1>
           </div>
           <div className="text-right">
             <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
-              Active
+              {myIncidents.length > 0 ? "Active" : "Available"}
             </div>
-            <div className="text-lg font-semibold">{myIncidents.length}</div>
+            <div className="text-lg font-semibold">
+              {myIncidents.length > 0 ? myIncidents.length : available.length}
+            </div>
           </div>
         </div>
 
-        <h2 className="mt-6 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          My assignments
-        </h2>
-        <div className="mt-2 space-y-2">
-          {myIncidents.map((i) => (
-            <IncidentCard key={i.id} i={i} />
-          ))}
-        </div>
+        {myIncidents.length > 0 && (
+          <>
+            <h2 className="mt-6 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              My assignments
+            </h2>
+            <div className="mt-2 space-y-2">
+              {myIncidents.map((i) => (
+                <IncidentCard key={i.id} i={i} />
+              ))}
+            </div>
+          </>
+        )}
 
         <h2 className="mt-6 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          Other zones
+          {myIncidents.length > 0 ? "Other zones" : "All active incidents"}
         </h2>
-        <div className="mt-2 space-y-2 opacity-70">
-          {others.slice(0, 3).map((i) => (
-            <IncidentCard key={i.id} i={i} muted />
+        <div className="mt-2 space-y-2">
+          {available.slice(0, 8).map((i) => (
+            <IncidentCard key={i.id} i={i} />
           ))}
         </div>
       </div>
