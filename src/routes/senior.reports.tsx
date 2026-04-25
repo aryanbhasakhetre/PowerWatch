@@ -61,7 +61,7 @@ function ReportsPage() {
           </div>
           <div className="flex gap-2">
             <button
-              onClick={downloadCSV}
+              onClick={() => downloadCSV(incidents)}
               className="inline-flex items-center gap-2 rounded-md border border-border bg-surface px-3.5 py-2 text-sm font-medium text-foreground transition-colors hover:bg-surface-2"
             >
               <Download className="h-4 w-4" /> Export CSV
