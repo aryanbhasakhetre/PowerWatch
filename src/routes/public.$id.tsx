@@ -1,17 +1,13 @@
-import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { AppShell } from "@/components/AppShell";
-import { incidents, IncidentStatus, statusLabel, timeAgo } from "@/lib/mock-data";
+import { IncidentStatus, statusLabel, timeAgo } from "@/lib/mock-data";
+import { useIncident } from "@/lib/incidents";
 import { SeverityBadge } from "@/components/SeverityBadge";
 import { cn } from "@/lib/utils";
 import { ArrowLeft, MapPin, Users } from "lucide-react";
 
 export const Route = createFileRoute("/public/$id")({
   head: () => ({ meta: [{ title: "Outage Tracker — PowerWatch" }] }),
-  loader: ({ params }) => {
-    const inc = incidents.find((i) => i.id === params.id);
-    if (!inc) throw notFound();
-    return { inc };
-  },
   component: PublicIncident,
   errorComponent: ({ error, reset }) => {
     const router = useRouter();
@@ -45,7 +41,28 @@ const flow: { key: IncidentStatus; label: string; tone: string }[] = [
 ];
 
 function PublicIncident() {
-  const { inc } = Route.useLoaderData();
+  const { id } = Route.useParams();
+  const { incident: inc, loading } = useIncident(id);
+
+  if (loading) {
+    return (
+      <AppShell persona="public">
+        <div className="p-8 text-center text-xs uppercase tracking-wider text-muted-foreground">
+          Loading incident…
+        </div>
+      </AppShell>
+    );
+  }
+  if (!inc) {
+    return (
+      <AppShell persona="public">
+        <div className="p-8 text-center text-sm">
+          Incident not found. <Link to="/public" className="underline">Back</Link>
+        </div>
+      </AppShell>
+    );
+  }
+
   const currentIdx = flow.findIndex((f) => f.key === inc.status);
 
   return (
@@ -77,14 +94,12 @@ function PublicIncident() {
           </div>
         </div>
 
-        {/* Swiggy-style live progress */}
         <div className="mt-5 rounded-lg border border-border bg-surface p-5">
           <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             Restoration progress
           </div>
 
           <div className="relative mt-6">
-            {/* Horizontal track */}
             <div className="absolute left-4 right-4 top-4 h-0.5 bg-border" />
             <div
               className={cn(
@@ -97,9 +112,7 @@ function PublicIncident() {
                       ? "bg-severity-significant"
                       : "bg-severity-warning",
               )}
-              style={{
-                width: `calc(${(currentIdx / (flow.length - 1)) * 100}% - 0px)`,
-              }}
+              style={{ width: `calc(${(currentIdx / (flow.length - 1)) * 100}% - 0px)` }}
             />
 
             <div className="relative grid grid-cols-4 gap-2">
@@ -143,7 +156,7 @@ function PublicIncident() {
 
           <div className="mt-6 rounded-md bg-surface-2 p-4 text-sm">
             <div className="font-semibold">
-              Current status: {statusLabel[inc.status as keyof typeof statusLabel]}
+              Current status: {statusLabel[inc.status]}
             </div>
             <p className="mt-1 text-muted-foreground">{inc.description}</p>
             <div className="mt-3 grid grid-cols-2 gap-3 text-[11px]">
