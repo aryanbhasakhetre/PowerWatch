@@ -1,11 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell } from "@/components/AppShell";
 import { juniors, fmtMin } from "@/lib/mock-data";
+import { RequireAuth } from "@/components/RequireAuth";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/senior/team")({
   head: () => ({ meta: [{ title: "Team Tracker — OMS" }] }),
-  component: TeamPage,
+  component: () => (
+    <RequireAuth role="senior">
+      <TeamPage />
+    </RequireAuth>
+  ),
 });
 
 function TeamPage() {

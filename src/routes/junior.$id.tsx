@@ -1,6 +1,9 @@
-import { createFileRoute, Link, notFound, useRouter } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { AppShell } from "@/components/AppShell";
-import { incidents, severityClasses, statusLabel, timeAgo } from "@/lib/mock-data";
+import { severityClasses, statusLabel, timeAgo } from "@/lib/mock-data";
+import { useIncident, updateIncidentStatus } from "@/lib/incidents";
+import { RequireAuth } from "@/components/RequireAuth";
+import { useAuth } from "@/lib/auth";
 import { SeverityBadge } from "@/components/SeverityBadge";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -16,46 +19,52 @@ import {
 
 export const Route = createFileRoute("/junior/$id")({
   head: () => ({ meta: [{ title: "Incident Detail — OMS" }] }),
-  loader: ({ params }) => {
-    const inc = incidents.find((i) => i.id === params.id);
-    if (!inc) throw notFound();
-    return { inc };
-  },
-  component: IncidentDetail,
+  component: () => (
+    <RequireAuth role="junior">
+      <IncidentDetail />
+    </RequireAuth>
+  ),
   errorComponent: ({ error, reset }) => {
     const router = useRouter();
     return (
       <div className="p-8 text-center">
         <p>{error.message}</p>
         <button
-          onClick={() => {
-            router.invalidate();
-            reset();
-          }}
+          onClick={() => { router.invalidate(); reset(); }}
           className="mt-4 rounded bg-primary px-4 py-2 text-sm text-primary-foreground"
-        >
-          Retry
-        </button>
+        >Retry</button>
       </div>
     );
   },
-  notFoundComponent: () => (
-    <div className="p-8 text-center text-sm">
-      Incident not found.{" "}
-      <Link to="/junior" className="underline">
-        Back to feed
-      </Link>
-    </div>
-  ),
 });
 
 type Step = "accept" | "arrive" | "repair" | "restore";
 
 function IncidentDetail() {
-  const { inc } = Route.useLoaderData();
-  const [step, setStep] = useState<Step>("accept");
+  const { id } = Route.useParams();
+  const { incident: inc, loading } = useIncident(id);
+  const { user } = useAuth();
   const [photo, setPhoto] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  if (loading || !inc) {
+    return (
+      <AppShell persona="junior">
+        <div className="p-8 text-center text-xs uppercase tracking-wider text-muted-foreground">
+          {loading ? "Loading…" : "Incident not found"}
+        </div>
+      </AppShell>
+    );
+  }
+
   const c = severityClasses(inc.severity);
+  // Derive current step from live status
+  const step: Step =
+    inc.status === "restored" ? "restore"
+    : inc.status === "repairing" ? "repair"
+    : inc.acknowledgedAt && !inc.arrivedAt ? "arrive"
+    : inc.arrivedAt ? "repair"
+    : "accept";
 
   const steps: { key: Step; label: string; icon: any }[] = [
     { key: "accept", label: "Accept Task", icon: CheckCircle2 },
@@ -63,18 +72,34 @@ function IncidentDetail() {
     { key: "repair", label: "Repair Started", icon: Wrench },
     { key: "restore", label: "Restored", icon: Zap },
   ];
-
   const stepIdx = steps.findIndex((s) => s.key === step);
 
-  function advance() {
-    if (step === "accept") setStep("arrive");
-    else if (step === "arrive") {
+  async function advance() {
+    if (!inc || !user) return;
+    setBusy(true);
+    if (step === "accept") {
+      await updateIncidentStatus(inc.id, {
+        acknowledged_at: new Date().toISOString(),
+        assigned_to: user.id,
+        status: "dispatched",
+      });
+    } else if (step === "arrive") {
       if (!photo) {
         alert("Photo proof of fault is mandatory before reporting arrival.");
+        setBusy(false);
         return;
       }
-      setStep("repair");
-    } else if (step === "repair") setStep("restore");
+      await updateIncidentStatus(inc.id, {
+        arrived_at: new Date().toISOString(),
+        status: "repairing",
+      });
+    } else if (step === "repair") {
+      await updateIncidentStatus(inc.id, {
+        restored_at: new Date().toISOString(),
+        status: "restored",
+      });
+    }
+    setBusy(false);
   }
 
   return (
@@ -197,7 +222,7 @@ function IncidentDetail() {
 
           <button
             onClick={advance}
-            disabled={step === "restore"}
+            disabled={step === "restore" || busy}
             className={cn(
               "mt-5 w-full rounded-md px-4 py-3 text-sm font-semibold transition-colors",
               step === "restore"

@@ -1,15 +1,33 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell } from "@/components/AppShell";
-import { closedLines, severityClasses, timeAgo } from "@/lib/mock-data";
+import { severityClasses, timeAgo } from "@/lib/mock-data";
+import { useIncidents } from "@/lib/incidents";
+import { RequireAuth } from "@/components/RequireAuth";
 import { SeverityBadge } from "@/components/SeverityBadge";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/senior/lines")({
   head: () => ({ meta: [{ title: "Line Closures — OMS" }] }),
-  component: LinesPage,
+  component: () => (
+    <RequireAuth role="senior">
+      <LinesPage />
+    </RequireAuth>
+  ),
 });
 
 function LinesPage() {
+  const { incidents } = useIncidents();
+  const closedLines = incidents
+    .filter((i) => i.status !== "restored")
+    .map((i) => ({
+      id: i.id,
+      name: i.feeder,
+      voltage: i.voltage,
+      severity: i.severity,
+      area: i.area,
+      affected: i.affectedConsumers,
+      since: i.reportedAt,
+    }));
   return (
     <AppShell persona="senior">
       <div className="px-4 py-6 lg:px-8 lg:py-8">

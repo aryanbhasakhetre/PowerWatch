@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { AppShell } from "@/components/AppShell";
 import { OutageMap } from "@/components/OutageMap";
-import { incidents, severityClasses, statusLabel, timeAgo } from "@/lib/mock-data";
+import { severityClasses, statusLabel, timeAgo } from "@/lib/mock-data";
+import { useIncidents } from "@/lib/incidents";
 import { SeverityBadge } from "@/components/SeverityBadge";
 import { cn } from "@/lib/utils";
 import { Bell, MapPin } from "lucide-react";
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/public/")({
 });
 
 function PublicHome() {
+  const { incidents } = useIncidents();
   return (
     <AppShell persona="public">
       <div className="px-4 py-5 lg:px-8 lg:py-8">

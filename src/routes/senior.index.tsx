@@ -2,15 +2,15 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { AppShell } from "@/components/AppShell";
 import { OutageMap } from "@/components/OutageMap";
 import { SeverityBadge } from "@/components/SeverityBadge";
+import { RequireAuth } from "@/components/RequireAuth";
 import {
-  incidents,
   juniors,
-  closedLines,
   severityClasses,
   fmtMin,
   timeAgo,
   statusLabel,
 } from "@/lib/mock-data";
+import { useIncidents } from "@/lib/incidents";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { AlertTriangle, Users, Zap, Activity, ArrowRight } from "lucide-react";
@@ -22,16 +22,32 @@ export const Route = createFileRoute("/senior/")({
       { name: "description", content: "Real-time grid command center for senior engineers." },
     ],
   }),
-  component: SeniorDashboard,
+  component: () => (
+    <RequireAuth role="senior">
+      <SeniorDashboard />
+    </RequireAuth>
+  ),
 });
 
 function SeniorDashboard() {
   const [selected, setSelected] = useState<string | undefined>();
+  const { incidents } = useIncidents();
   const critical = incidents.filter((i) => i.severity === "critical" && i.status !== "restored");
   const totalAffected = incidents
     .filter((i) => i.status !== "restored")
     .reduce((a, b) => a + b.affectedConsumers, 0);
   const escalations = juniors.filter((j) => (j.pendingAckMinutes ?? 0) > 15);
+  const closedLines = incidents
+    .filter((i) => i.status !== "restored")
+    .map((i) => ({
+      id: i.id,
+      name: i.feeder,
+      voltage: i.voltage,
+      severity: i.severity,
+      area: i.area,
+      affected: i.affectedConsumers,
+      since: i.reportedAt,
+    }));
 
   return (
     <AppShell persona="senior">
