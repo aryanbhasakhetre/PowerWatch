@@ -14,16 +14,190 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      citizen_reports: {
+        Row: {
+          area: string | null
+          created_at: string
+          description: string | null
+          id: string
+          incident_id: string | null
+          lat: number
+          lng: number
+          reporter_id: string | null
+        }
+        Insert: {
+          area?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          incident_id?: string | null
+          lat: number
+          lng: number
+          reporter_id?: string | null
+        }
+        Update: {
+          area?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          incident_id?: string | null
+          lat?: number
+          lng?: number
+          reporter_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "citizen_reports_incident_id_fkey"
+            columns: ["incident_id"]
+            isOneToOne: false
+            referencedRelation: "incidents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      incidents: {
+        Row: {
+          acknowledged_at: string | null
+          affected_consumers: number
+          area: string
+          arrived_at: string | null
+          assigned_to: string | null
+          citizen_reports: number
+          code: string
+          created_at: string
+          description: string | null
+          feeder: string
+          id: string
+          lat: number
+          lng: number
+          reported_at: string
+          restored_at: string | null
+          severity: Database["public"]["Enums"]["severity"]
+          status: Database["public"]["Enums"]["incident_status"]
+          title: string
+          updated_at: string
+          voltage: string
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          affected_consumers?: number
+          area: string
+          arrived_at?: string | null
+          assigned_to?: string | null
+          citizen_reports?: number
+          code: string
+          created_at?: string
+          description?: string | null
+          feeder: string
+          id?: string
+          lat: number
+          lng: number
+          reported_at?: string
+          restored_at?: string | null
+          severity?: Database["public"]["Enums"]["severity"]
+          status?: Database["public"]["Enums"]["incident_status"]
+          title: string
+          updated_at?: string
+          voltage: string
+        }
+        Update: {
+          acknowledged_at?: string | null
+          affected_consumers?: number
+          area?: string
+          arrived_at?: string | null
+          assigned_to?: string | null
+          citizen_reports?: number
+          code?: string
+          created_at?: string
+          description?: string | null
+          feeder?: string
+          id?: string
+          lat?: number
+          lng?: number
+          reported_at?: string
+          restored_at?: string | null
+          severity?: Database["public"]["Enums"]["severity"]
+          status?: Database["public"]["Enums"]["incident_status"]
+          title?: string
+          updated_at?: string
+          voltage?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_initials: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          updated_at: string
+          zone: string | null
+        }
+        Insert: {
+          avatar_initials?: string | null
+          created_at?: string
+          full_name?: string | null
+          id: string
+          updated_at?: string
+          zone?: string | null
+        }
+        Update: {
+          avatar_initials?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+          zone?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_my_role: {
+        Args: never
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "senior" | "junior" | "public"
+      incident_status:
+        | "reported"
+        | "verified"
+        | "dispatched"
+        | "repairing"
+        | "restored"
+      severity: "warning" | "significant" | "critical"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +324,16 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["senior", "junior", "public"],
+      incident_status: [
+        "reported",
+        "verified",
+        "dispatched",
+        "repairing",
+        "restored",
+      ],
+      severity: ["warning", "significant", "critical"],
+    },
   },
 } as const
