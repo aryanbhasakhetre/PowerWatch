@@ -3,6 +3,8 @@ import { AppShell } from "@/components/AppShell";
 import { useState } from "react";
 import { Camera, Check, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/public/report")({
   head: () => ({ meta: [{ title: "Report a Fault — PowerWatch" }] }),
@@ -10,9 +12,12 @@ export const Route = createFileRoute("/public/report")({
 });
 
 function ReportFault() {
+  const { user } = useAuth();
   const [photo, setPhoto] = useState<string | null>(null);
   const [desc, setDesc] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
 
   if (submitted) {
     return (

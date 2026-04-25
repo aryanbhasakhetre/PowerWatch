@@ -222,7 +222,7 @@ function IncidentDetail() {
 
           <button
             onClick={advance}
-            disabled={step === "restore"}
+            disabled={step === "restore" || busy}
             className={cn(
               "mt-5 w-full rounded-md px-4 py-3 text-sm font-semibold transition-colors",
               step === "restore"
