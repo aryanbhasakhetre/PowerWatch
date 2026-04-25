@@ -1,6 +1,7 @@
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/auth";
 import {
   Activity,
   Users,
@@ -11,6 +12,7 @@ import {
   HardHat,
   Globe,
   Bell,
+  LogOut,
 } from "lucide-react";
 
 type NavItem = { to: string; label: string; icon: any };
@@ -50,6 +52,17 @@ export function AppShell({
 
   const Icon = personaInfo.icon;
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, role, signOut } = useAuth();
+  const initials =
+    (user?.user_metadata?.full_name as string | undefined)?.split(" ").map((s) => s[0]).join("").slice(0, 2).toUpperCase() ||
+    user?.email?.slice(0, 2).toUpperCase() ||
+    (persona === "senior" ? "AS" : persona === "junior" ? "RP" : "C");
+
+  async function handleSignOut() {
+    await signOut();
+    navigate({ to: "/" });
+  }
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -125,16 +138,27 @@ export function AppShell({
                 {personaInfo.role} · State Electricity Board
               </span>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="hidden md:flex items-center gap-2 rounded-full border border-border bg-surface px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-                </span>
-                LIVE
-              </div>
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-[11px] font-semibold text-primary-foreground">
-                {persona === "senior" ? "AS" : persona === "junior" ? "RP" : "C"}
+              <div className="flex items-center gap-2">
+                <div className="hidden sm:flex h-8 items-center gap-2 rounded-full border border-border bg-surface px-2.5 text-[11px] font-medium text-muted-foreground">
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+                  </span>
+                  LIVE
+                </div>
+                {user && (
+                  <button
+                    onClick={handleSignOut}
+                    title={`Signed in as ${user.email} (${role})`}
+                    className="flex items-center gap-1.5 rounded-md border border-border bg-surface px-2 py-1 text-[11px] font-medium text-muted-foreground hover:text-foreground"
+                  >
+                    <LogOut className="h-3 w-3" />
+                    Sign out
+                  </button>
+                )}
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-[11px] font-semibold text-primary-foreground">
+                  {initials}
+                </div>
               </div>
             </div>
           </header>
