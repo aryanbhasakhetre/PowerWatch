@@ -6,7 +6,7 @@ import { RequireAuth } from "@/components/RequireAuth";
 import { Download, FileText } from "lucide-react";
 
 export const Route = createFileRoute("/senior/reports")({
-  head: () => ({ meta: [{ title: "Shift Reports — OMS" }] }),
+  head: () => ({ meta: [{ title: "Shift Reports — PowerWatch" }] }),
   component: () => (
     <RequireAuth role="senior">
       <ReportsPage />

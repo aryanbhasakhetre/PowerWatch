@@ -9,7 +9,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/senior/map")({
-  head: () => ({ meta: [{ title: "Live Map — OMS" }] }),
+  head: () => ({ meta: [{ title: "Live Map — PowerWatch" }] }),
   component: () => (
     <RequireAuth role="senior">
       <MapView />

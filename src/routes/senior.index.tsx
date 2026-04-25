@@ -18,7 +18,7 @@ import { AlertTriangle, Users, Zap, Activity, ArrowRight } from "lucide-react";
 export const Route = createFileRoute("/senior/")({
   head: () => ({
     meta: [
-      { title: "Command Center — OMS" },
+      { title: "Command Center — PowerWatch" },
       { name: "description", content: "Real-time grid command center for senior engineers." },
     ],
   }),

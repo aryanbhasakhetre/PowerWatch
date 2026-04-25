@@ -4,13 +4,13 @@ import { HardHat, Wrench, Globe, Activity, Zap } from "lucide-react";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "OMS — Outage Management System" },
+      { title: "PowerWatch — Outage Management System" },
       {
         name: "description",
         content:
-          "Real-time outage management platform connecting field engineers, command centers, and citizens.",
+          "PowerWatch is a real-time outage management platform connecting field engineers, command centers, and citizens.",
       },
-      { property: "og:title", content: "OMS — Outage Management System" },
+      { property: "og:title", content: "PowerWatch — Outage Management System" },
       {
         property: "og:description",
         content:
@@ -55,7 +55,7 @@ function Index() {
               <Zap className="h-4 w-4" />
             </div>
             <div>
-              <div className="text-sm font-semibold tracking-tight">OMS Platform</div>
+              <div className="text-sm font-semibold tracking-tight">PowerWatch</div>
               <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
                 State Electricity Board
               </div>
@@ -75,7 +75,7 @@ function Index() {
         <div className="max-w-2xl">
           <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
             <Activity className="h-3 w-3" />
-            Outage Management System
+            PowerWatch · Outage Management
           </div>
           <h1 className="mt-5 text-4xl font-semibold tracking-tight text-foreground lg:text-5xl">
             One grid. Three views.
@@ -129,7 +129,7 @@ function Index() {
 
       <footer className="border-t border-border">
         <div className="mx-auto max-w-6xl px-6 py-6 text-[11px] uppercase tracking-wider text-muted-foreground">
-          OMS v1.0 · Real-time grid intelligence
+          PowerWatch v1.0 · Real-time grid intelligence
         </div>
       </footer>
     </div>

@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { ChevronRight, MapPin } from "lucide-react";
 
 export const Route = createFileRoute("/junior/")({
-  head: () => ({ meta: [{ title: "Field Incidents — OMS" }] }),
+  head: () => ({ meta: [{ title: "Field Incidents — PowerWatch" }] }),
   component: () => (
     <RequireAuth role="junior">
       <JuniorFeed />

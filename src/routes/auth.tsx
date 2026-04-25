@@ -5,7 +5,7 @@ import { Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/auth")({
-  head: () => ({ meta: [{ title: "Sign in — OMS" }] }),
+  head: () => ({ meta: [{ title: "Sign in — PowerWatch" }] }),
   component: AuthPage,
 });
 
@@ -52,7 +52,7 @@ function AuthPage() {
             <Zap className="h-4 w-4" />
           </div>
           <div>
-            <div className="text-sm font-semibold tracking-tight">OMS Platform</div>
+            <div className="text-sm font-semibold tracking-tight">PowerWatch</div>
             <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
               State Electricity Board
             </div>

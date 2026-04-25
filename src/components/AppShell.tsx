@@ -45,8 +45,8 @@ export function AppShell({
     persona === "senior" ? seniorNav : persona === "junior" ? juniorNav : publicNav;
 
   const personaInfo = {
-    senior: { title: "OMS Command", role: "Senior Engineer", icon: HardHat },
-    junior: { title: "OMS Field", role: "Junior Engineer", icon: Wrench },
+    senior: { title: "PowerWatch Command", role: "Senior Engineer", icon: HardHat },
+    junior: { title: "PowerWatch Field", role: "Junior Engineer", icon: Wrench },
     public: { title: "PowerWatch", role: "Consumer Portal", icon: Globe },
   }[persona];
 
