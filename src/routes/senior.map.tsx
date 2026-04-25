@@ -1,21 +1,26 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell } from "@/components/AppShell";
 import { OutageMap } from "@/components/OutageMap";
-import { incidents, severityClasses, statusLabel, timeAgo } from "@/lib/mock-data";
+import { severityClasses, statusLabel, timeAgo } from "@/lib/mock-data";
+import { useIncidents } from "@/lib/incidents";
+import { RequireAuth } from "@/components/RequireAuth";
 import { SeverityBadge } from "@/components/SeverityBadge";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/senior/map")({
-  head: () => ({
-    meta: [{ title: "Live Map — OMS" }],
-  }),
-  component: MapView,
+  head: () => ({ meta: [{ title: "Live Map — OMS" }] }),
+  component: () => (
+    <RequireAuth role="senior">
+      <MapView />
+    </RequireAuth>
+  ),
 });
 
 function MapView() {
-  const [selected, setSelected] = useState<string | undefined>(incidents[0]?.id);
-  const sel = incidents.find((i) => i.id === selected);
+  const { incidents } = useIncidents();
+  const [selected, setSelected] = useState<string | undefined>();
+  const sel = incidents.find((i) => i.id === selected) ?? incidents[0];
 
   return (
     <AppShell persona="senior">
