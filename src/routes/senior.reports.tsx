@@ -1,14 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell } from "@/components/AppShell";
-import { incidents, juniors, fmtMin, statusLabel, severityLabel } from "@/lib/mock-data";
+import { juniors, fmtMin, statusLabel, severityLabel, type Incident } from "@/lib/mock-data";
+import { useIncidents } from "@/lib/incidents";
+import { RequireAuth } from "@/components/RequireAuth";
 import { Download, FileText } from "lucide-react";
 
 export const Route = createFileRoute("/senior/reports")({
   head: () => ({ meta: [{ title: "Shift Reports — OMS" }] }),
-  component: ReportsPage,
+  component: () => (
+    <RequireAuth role="senior">
+      <ReportsPage />
+    </RequireAuth>
+  ),
 });
 
-function downloadCSV() {
+function downloadCSV(incidents: Incident[]) {
   const rows = [
     ["Code", "Title", "Feeder", "Area", "Voltage", "Severity", "Status", "Affected", "Assigned"],
     ...incidents.map((i) => [
@@ -34,14 +40,14 @@ function downloadCSV() {
 }
 
 function ReportsPage() {
+  const { incidents } = useIncidents();
   const month = new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" });
   const totalAffected = incidents.reduce((a, b) => a + b.affectedConsumers, 0);
   const restored = incidents.filter((i) => i.status === "restored").length;
-  const avgAck =
-    juniors.reduce((a, b) => a + b.ackMinutes, 0) / juniors.filter((j) => j.ackMinutes > 0).length;
-  const avgMttr =
-    juniors.filter((j) => j.mttrMinutes > 0).reduce((a, b) => a + b.mttrMinutes, 0) /
-      Math.max(1, juniors.filter((j) => j.mttrMinutes > 0).length) || 0;
+  const ackJ = juniors.filter((j) => j.ackMinutes > 0);
+  const avgAck = ackJ.length ? ackJ.reduce((a, b) => a + b.ackMinutes, 0) / ackJ.length : 0;
+  const mttrJ = juniors.filter((j) => j.mttrMinutes > 0);
+  const avgMttr = mttrJ.length ? mttrJ.reduce((a, b) => a + b.mttrMinutes, 0) / mttrJ.length : 0;
 
   return (
     <AppShell persona="senior">
